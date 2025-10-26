@@ -33,10 +33,10 @@ class CartItem extends StatelessWidget {
               height: 80,
               width: 80,
               errorBuilder: (_, __, ___) => Container(
-                  height: 80,
-                  width: 80,
-                  alignment: Alignment.center,
-                  child: Icon(Icons.error_outline),
+                height: 80,
+                width: 80,
+                alignment: Alignment.center,
+                child: Icon(Icons.error_outline),
               ),
             ),
           ),
@@ -53,17 +53,23 @@ class CartItem extends StatelessWidget {
                           children: [
                             Text(
                               cartItemModel.product.title,
-                              style: TextTheme.of(context).titleSmall,
+                              style: Theme.of(context).textTheme.titleSmall,
                             ),
                             Text(
                               'Size: ${cartItemModel.size ?? 'Nil'}  Color: ${cartItemModel.color ?? 'Nil'}',
-                              style: TextTheme.of(context).bodySmall,
+                              style: Theme.of(context).textTheme.bodySmall,
                             ),
                           ],
                         ),
                       ),
                       IconButton(
-                        onPressed: () {},
+
+                        onPressed: () {
+
+                          Get.find<CartListController>()
+                              .deleteCartItem(cartItemModel.id);
+                        },
+
                         icon: Icon(Icons.delete_forever_outlined),
                       ),
                     ],
@@ -73,9 +79,9 @@ class CartItem extends StatelessWidget {
                     children: [
                       Text(
                         '$takaSign${cartItemModel.product.currentPrice}',
-                        style: TextTheme.of(
+                        style: Theme.of(
                           context,
-                        ).titleSmall?.copyWith(color: AppColors.themeColor),
+                        ).textTheme.titleSmall?.copyWith(color: AppColors.themeColor),
                       ),
                       IncDecButton(onChange: (int value) {
                         Get.find<CartListController>().updateCart(cartItemModel.id, value);
