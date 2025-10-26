@@ -11,6 +11,9 @@ class TotalPriceAndCheckoutSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    // Get an instance of the controller to use in the button
+    final CartListController cartController = Get.find<CartListController>();
+
     return Container(
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -34,20 +37,37 @@ class TotalPriceAndCheckoutSection extends StatelessWidget {
                 ),
               ),
               GetBuilder<CartListController>(
-                builder: (controller) {
-                  return Text(
-                    '$takaSign${controller.totalPrice}',
-                    style: textTheme.titleMedium?.copyWith(
-                      color: AppColors.themeColor,
-                    ),
-                  );
-                }
+                  builder: (controller) {
+                    return Text(
+                      '$takaSign${controller.totalPrice}',
+                      style: textTheme.titleMedium?.copyWith(
+                        color: AppColors.themeColor,
+                      ),
+                    );
+                  }
               ),
             ],
           ),
           SizedBox(
             width: 120,
-            child: FilledButton(onPressed: () {}, child: Text('Checkout')),
+            // --- UPDATE THE onPressed METHOD ---
+            child: FilledButton(
+              onPressed: () {
+                // Add a check for an empty cart
+                if (cartController.cartItemList.isEmpty) {
+                  Get.snackbar(
+                    'Empty Cart',
+                    'Please add items to your cart first.',
+                    snackPosition: SnackPosition.BOTTOM,
+                  );
+                  return;
+                }
+
+                // Call the checkout method
+                cartController.checkout();
+              },
+              child: Text('Checkout'),
+            ),
           ),
         ],
       ),
